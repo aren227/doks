@@ -4,41 +4,18 @@ on:
   push:
     branches:
       - master
+      - test-workflow
   repository_dispatch:
     types: [ push_event ]
 
 jobs:
   deploy:
-    runs-on: ubuntu-22.04
+    runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: true  # Fetch Hugo themes (true OR recursive)
-          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
-
-      - name: Clone Vault
-        uses: actions/checkout@v2
-        with:
-          repository: aren227/obsidian-public-vault
-          path: ./vault
-
-      - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-            toolchain: stable
-            override: true
-            components: rustfmt, clippy
-
-      - name: Install obsidian-export
-        run: cargo install obsidian-export --root ./obsidian-export
-
-      - name: Export ObsidianMD
-        run: ./obsidian-export/bin/obsidian-export ./vault/ ./content/en/
-
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: 'latest'
+          hugo-version: '0.101.0'
           extended: true
 
       - name: Setup Node
@@ -46,8 +23,24 @@ jobs:
         with:
           node-version: '18.x'
 
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
       - name: Npm Install
         run: npm install
+
+      - name: Clone Vault
+        uses: actions/checkout@v2
+        with:
+          repository: aren227/obsidian-public-vault
+          path: ./vault
+
+      - name: Install obsidian-export
+        run: Invoke-Webrequest -URI "https://github.com/zoni/obsidian-export/releases/download/v22.1.0/obsidian-export_Windows-x64_64.exe" -OutFile "obsidian-export.exe"
+
+      - name: Export ObsidianMD
+        run: ./obsidian-export ./vault/ ./content/en/
 
       - name: Build
         run: hugo --minify
@@ -57,3 +50,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+          cname: aren227.me
