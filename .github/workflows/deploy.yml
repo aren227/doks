@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - test-workflow
   repository_dispatch:
     types: [ push_event ]
 
@@ -11,30 +12,6 @@ jobs:
   deploy:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: true  # Fetch Hugo themes (true OR recursive)
-          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
-
-      - name: Clone Vault
-        uses: actions/checkout@v2
-        with:
-          repository: aren227/obsidian-public-vault
-          path: ./vault
-
-      - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-            toolchain: stable
-            override: true
-            components: rustfmt, clippy
-
-      - name: Install obsidian-export
-        run: cargo install obsidian-export --root ./obsidian-export
-
-      - name: Export ObsidianMD
-        run: ./obsidian-export/bin/obsidian-export ./vault/ ./content/en/
-
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
@@ -46,8 +23,36 @@ jobs:
         with:
           node-version: '18.x'
 
+      - name: Setup Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+            toolchain: stable
+            override: true
+            components: rustfmt, clippy
+
+      - uses: actions/checkout@v3
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
       - name: Npm Install
         run: npm install
+
+      - name: Clone Vault
+        uses: actions/checkout@v2
+        with:
+          repository: aren227/obsidian-public-vault
+          path: ./vault
+
+      - name: Install obsidian-export
+        run: cargo install obsidian-export --root ./obsidian-export
+
+      - name: Export ObsidianMD
+        run: ./obsidian-export/bin/obsidian-export ./vault/ ./content/en/
+
+      - run: sudo apt-get install tree && tree ./content/en/
+
+      - run: cat ./content/en/docs/Philosophy/OOP/Single\ responsibility\ principle.md
 
       - name: Build
         run: hugo --minify
