@@ -2,6 +2,8 @@
 .contributors.list .card,
 .blog.list .card,
 .blog.single .card,
+.projects.list .card,
+.projects.single .card,
 .categories.list .card,
 .tags.list .card {
   margin-top: 2rem;
@@ -13,6 +15,8 @@
 .contributors.list .card:hover,
 .blog.list .card:hover,
 .blog.single .card:hover,
+.projects.list .card:hover,
+.projects.single .card:hover,
 .categories.list .card:hover,
 .tags.list .card:hover {
   transform: scale(1.025);
@@ -28,6 +32,8 @@
 .contributors.list .card-body,
 .blog.list .card-body,
 .blog.single .card-body,
+.projects.list .card-body,
+.projects.single .card-body,
 .categories.list .card-body,
 .tags.list .card-body {
   padding: 0 2rem 1rem;
