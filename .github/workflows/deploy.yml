@@ -10,7 +10,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-22.04
+    runs-on: windows-latest
     steps:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
@@ -49,11 +49,6 @@ jobs:
 
       - name: Export ObsidianMD
         run: ./obsidian-export/bin/obsidian-export ./vault/ ./content/en/
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: my-dump
-          path: ./
 
       - name: Build
         run: hugo --minify
