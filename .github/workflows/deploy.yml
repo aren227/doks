@@ -33,7 +33,7 @@ jobs:
         run: cargo install obsidian-export --root ./obsidian-export
 
       - name: Export ObsidianMD
-        run: ./obsidian-export/bin/obsidian-export.bin ./vault/ ./content/en/
+        run: ./obsidian-export/bin/obsidian-export ./vault/ ./content/en/
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
