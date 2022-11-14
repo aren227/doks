@@ -50,9 +50,10 @@ jobs:
       - name: Export ObsidianMD
         run: ./obsidian-export/bin/obsidian-export ./vault/ ./content/en/
 
-      - run: sudo apt-get install tree && tree ./content/en/
-
-      - run: cat ./content/en/docs/Philosophy/OOP/Single\ responsibility\ principle.md
+      - uses: actions/upload-artifact@v3
+        with:
+          name: my-dump
+          path: ./
 
       - name: Build
         run: hugo --minify
