@@ -37,7 +37,7 @@ jobs:
           path: ./vault
 
       - name: Install obsidian-export
-        run: curl https://github.com/zoni/obsidian-export/releases/download/v22.1.0/obsidian-export_Windows-x64_64.exe -o obsidian-export.exe
+        run: Invoke-Webrequest -URI "https://github.com/zoni/obsidian-export/releases/download/v22.1.0/obsidian-export_Windows-x64_64.exe" -OutFile "obsidian-export.exe"
 
       - name: Export ObsidianMD
         run: ./obsidian-export ./vault/ ./content/en/
